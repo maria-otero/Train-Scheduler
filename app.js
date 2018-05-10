@@ -44,45 +44,58 @@ $('#add-train').on('click', function(event) {
       destination: destination,
       firstTime: firstTime,
       frequency: frequency
-  })
-})
+  });
+  
+  // Clean imput placeholders
+  $('#train-input').val('');
+  $('#destination-input').val('');
+  $('#firstTime-input').val('');
+  $('#frequency-input').val('');
+});
 
 
 // Use Moments.js to claculate when is going to arraive the train... what time is going to pass between present HH:MM and the schedule time for the train to arrive.
 firebase.database().ref().on('child_added', function(sanpshot) {
   
-  var trainsInfoTable = $('#train-info');
-  var trainInfo = $('<tr>');
   var nameTD = sanpshot.val().name;
   var destinationTD = sanpshot.val().destination;
-  var firstTimeTD = $('<td>');
-  var frequencyTD = $('<td>');
+  var firstTimeTD = sanpshot.val().firstTime;
+  var frequencyTD = sanpshot.val().frequency;
 
   
-  $("#train-info").append("<tr><td>" + nameTD + "</td><td>" + destinationTD + "</td></tr>");
+  $("#train-info").append('<tr><td>' + nameTD + '</td><td>' + destinationTD + '</td><td>' + firstTimeTD + '</td><td>' + frequencyTD + '</td></tr>');
+
+
+});
 
 
 
-  // trainInfo.text(sanpshot.val().name);
 
-  // trainInfo.append();
-  // // console.log(destinationTD);
+// firebase.database().ref().on('child_added', function(snapshot) {
+//   //reference tbody
+//   var trainsInfoTable = $('#train-info');
+//   //new row
+//   var newTrainInfo = $('<tr>');
+//   //new train information
+//   var nameTD = $('<td>');
+//   var destinationTD =  $('<td>');
+//   var firstTimeTD = $('<td>');
+//   var frequencyTD = $('<td>');
 
-  // firstTimeTD.html = sanpshot.val().firstTime;
-  // trainInfo.append(firstTimeTD);
-  // // console.log(firstTimeTD);
+//   //adding the info from firebase
+//   nameTD.text(snapshot.val().name);
+//   destinationTD.text(snapshot.val().destination);
+//   firstTimeTD.text(snapshot.val().firstTime);
+//   frequencyTD.text(snapshot.val().frequency);
 
-  // frequencyTD.html = sanpshot.val().frequency;
-  // trainInfo.append(frequencyTD);
-  // trainsInfoTable.append(trainInfo);
-  // console.log(frequencyTD);
+//   //append all information to new row
+//   newTrainInfo.append(nameTD);
+//   newTrainInfo.append(destinationTD);
+//   newTrainInfo.append(firstTimeTD);
+//   newTrainInfo.append(frequencyTD);
 
-})
+//   //append the new row to the tbody
+//   trainsInfoTable.append(newTrainInfo);
+// })
    
 
-
-
-
-// ** Consider updating your "minutes to arrival" and "next train time" text once every minute. 
-
-// ** As a final challenge, make it so that only users who log into the site with their Google or GitHub accounts can use your site. You'll need to read up on Firebase authentication for this bonus exercise.
