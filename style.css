@@ -1,6 +1,11 @@
 h1, h5, h6 {
     color: white;
 }
+
+.table td, .table th {
+    border-top: none;
+    border-bottom: 1px solid #dee2e6;
+}
 .jumbotron {
     background-color: #23345a;
 }
@@ -9,12 +14,18 @@ h1, h5, h6 {
     height: 46px;
     border-radius: 4px 4px 0px 0px;
     padding:12px;
-    padding-left:14px;
+    padding-left:20px;
+    padding-right:20px;
+    padding-top:12px;
 }
 .panel-body {
     border: 1px solid #23345a;
     border-radius: 0px 0px 4px 4px;
+    padding:20px;
+    padding-right:20px;
+    padding-top:12px;
 }
 .padding-form {
     padding: 12px;
 }
+
