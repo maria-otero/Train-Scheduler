@@ -1,0 +1,20 @@
+h1, h5, h6 {
+    color: white;
+}
+.jumbotron {
+    background-color: #23345a;
+}
+.panel-heading {
+    background-color: #23345a;
+    height: 46px;
+    border-radius: 4px 4px 0px 0px;
+    padding:12px;
+    padding-left:14px;
+}
+.panel-body {
+    border: 1px solid #23345a;
+    border-radius: 0px 0px 4px 4px;
+}
+.padding-form {
+    padding: 12px;
+}
