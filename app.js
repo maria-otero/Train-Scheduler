@@ -10,63 +10,75 @@ var config = {
 firebase.initializeApp(config);
 
 
-// PROJECT:
-// 1 - Firebase is going to host arrival and departure data
-// 2 - This app will retrieve and manipulate this information with Moment.js
-// 3 - Also will provide up-to-date information about various trains, namely their arrival times and how many minutes remain until they arrive at their station
-// 4 -- When adding trains, administrators should be able to submit the following: -- Train Name -- Destination First Train Time (in military time) -- Frequency (in minutes).
-
 
 // Once the user complete the form, the new infomation is going to be saved into the database. So we need to create an on click event to the submit button to make this possible.
 $('#add-train').on('click', function(event) {
   event.preventDefault();
-
   
-  //First we need to creat the var containing the strigs/numbers that our (right now empty database) firebase database are going to keep inside.
-  var name = '';
-  var destination = '';
-  var firstTime;
-  var frequency;
+    //First we need to creat the var containing the strigs/numbers that our (right now empty database) firebase database are going to keep inside.
+    var name = '';
+    var destination = '';
+    var firstTime;
+    var frequency;
 
-  name = $('#train-input').val().trim();
-  destination = $('#destination-input').val().trim();
-  firstTime = $('#firstTime-input').val().trim();
-  frequency = $('#frequency-input').val().trim();
+    name = $('#train-input').val().trim();
+    destination = $('#destination-input').val().trim();
+    firstTime = $('#firstTime-input').val().trim();
+    frequency = $('#frequency-input').val().trim();
 
-
-  // Clean
-  // $('#train-input').empty();
-  // $('#destination-input').empty();
-  console.log('name from input ' + name);
-
-  firebase.database().ref().push({
-      name: name,
-      destination: destination,
-      firstTime: firstTime,
-      frequency: frequency
-  });
-  
-  // Clean imput placeholders
-  $('#train-input').val('');
-  $('#destination-input').val('');
-  $('#firstTime-input').val('');
-  $('#frequency-input').val('');
-});
+    firebase.database().ref().push({
+        name: name,
+        destination: destination,
+        firstTime: firstTime,
+        frequency: frequency
+    });
+    
+    // Clean imput placeholders
+    $('#train-input').val('');
+    $('#destination-input').val('');
+    $('#firstTime-input').val('');
+    $('#frequency-input').val('');
+ });
 
 
 // Use Moments.js to claculate when is going to arraive the train... what time is going to pass between present HH:MM and the schedule time for the train to arrive.
-firebase.database().ref().on('child_added', function(sanpshot) {
+firebase.database().ref().on('child_added', function(snapshot) {
   
-  var nameTD = sanpshot.val().name;
-  var destinationTD = sanpshot.val().destination;
-  var firstTimeTD = sanpshot.val().firstTime;
-  var frequencyTD = sanpshot.val().frequency;
+  var name = snapshot.val().name;
+  var destination = snapshot.val().destination;
+  var firstTime = snapshot.val().firstTime;
+  var frequency = snapshot.val().frequency;
 
   
-  $("#train-info").append('<tr><td>' + nameTD + '</td><td>' + destinationTD + '</td><td>' + firstTimeTD + '</td><td>' + frequencyTD + '</td></tr>');
+      //remove the years
+      var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
 
+      // Current Time
+      var currentTime = moment();
 
+      // Difference between the times
+      var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+
+      // Time apart using modular 
+      var tRemainder = diffTime % frequency;
+
+      // Minute Until Train
+      var tMinutesTillTrain = frequency - tRemainder;
+
+      // Next Train
+      var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+
+ // dynamically creating and appending a new row in the table with new td
+  $("#train-info").append('<tr><td>' + name + '</td><td>' + destination + '</td><td>' +
+  frequency + '</td><td>' + moment(nextTrain).format("HH:mm") + '</td><td>' + tMinutesTillTrain + '</td></tr>');
 });
+
+
+
+
+
+
+
 
 
 
